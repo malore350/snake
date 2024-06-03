@@ -10,6 +10,11 @@ pygame.init()
 WIDTH, HEIGHT = 300, 300
 GRID_SIZE = 20
 
+WINDOW_WIDTH = WIDTH
+WINDOW_HEIGHT = HEIGHT + 50  # Extra space for score
+
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
 # Colors
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -17,7 +22,6 @@ RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 
 # Initialize screen
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 def heuristic(a, b):
@@ -164,11 +168,73 @@ class SnakeGameAI:
 
     def render(self):
         screen.fill(BLACK)
+
+        # Draw score in the extra space
+        font = pygame.font.Font(None, 36)
+        text = font.render(f'Score: {self.score}', True, WHITE)
+        screen.blit(text, (10, 10))  # Draw text at the top of the window
+
+        # Draw borders
+        pygame.draw.line(screen, WHITE, (0, 50), (WIDTH, 50), 5)  # Top border
+        pygame.draw.line(screen, WHITE, (0, HEIGHT + 50), (WIDTH, HEIGHT + 50), 5)  # Bottom border
+        pygame.draw.line(screen, WHITE, (0, 50), (0, HEIGHT + 50), 5)  # Left border
+        pygame.draw.line(screen, WHITE, (WIDTH, 50), (WIDTH, HEIGHT + 50), 5)  # Right border
+
+        # Draw snake and food
         for segment in self.snake:
-            pygame.draw.rect(screen, GREEN, (*segment, GRID_SIZE, GRID_SIZE))
-        pygame.draw.rect(screen, RED, (*self.food, GRID_SIZE, GRID_SIZE))
+            pygame.draw.rect(screen, GREEN, (segment[0], segment[1] + 50, GRID_SIZE, GRID_SIZE))
+        pygame.draw.rect(screen, RED, (self.food[0], self.food[1] + 50, GRID_SIZE, GRID_SIZE))
+
         pygame.display.flip()
         clock.tick(10)
+
+class GameScreen:
+    def start_screen(self):
+        while True:
+            screen.fill(BLACK)
+            font = pygame.font.Font(None, 22)
+            text = font.render('Press any key to start the game', True, WHITE)
+            screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    return
+
+    def game_over_screen(self):
+        button_width = 200
+        button_height = 50
+        exit_button = pygame.Rect(WIDTH // 2 - button_width // 2, HEIGHT // 2, button_width, button_height)
+        play_again_button = pygame.Rect(WIDTH // 2 - button_width // 2, HEIGHT // 2 - 60, button_width, button_height)
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+                    if exit_button.collidepoint(mouse_pos):
+                        pygame.quit()
+                    elif play_again_button.collidepoint(mouse_pos):
+                        return True
+
+            screen.fill(BLACK)
+            font = pygame.font.Font(None, 22)
+
+            # Draw exit button
+            pygame.draw.rect(screen, RED, exit_button)  # Draw button
+            exit_text = font.render('Exit', True, WHITE)
+            screen.blit(exit_text, (exit_button.x + (exit_button.width - exit_text.get_width()) // 2, exit_button.y + (exit_button.height - exit_text.get_height()) // 2))  # Draw text
+
+            # Draw play again button
+            pygame.draw.rect(screen, GREEN, play_again_button)  # Draw button
+            play_again_text = font.render('Play Again', True, WHITE)
+            screen.blit(play_again_text, (play_again_button.x + (play_again_button.width - play_again_text.get_width()) // 2, play_again_button.y + (play_again_button.height - play_again_text.get_height()) // 2))  # Draw text
+
+            pygame.display.flip()
 
 # Example usage
 if __name__ == "__main__":

@@ -1,10 +1,14 @@
 import torch
 import numpy as np
-from snake_game import SnakeGameAI
+from snake_game import SnakeGameAI, GameScreen
 from dqn import DQNAgent
 import pygame
 
 def play(render=True):
+    # Run the start screen function
+    animations = GameScreen()
+    animations.start_screen()
+
     game = SnakeGameAI()
     state_dim = game.get_state().shape[0]
     action_dim = 4  # Number of possible actions: up, down, left, right
@@ -15,7 +19,6 @@ def play(render=True):
     agent.model.eval()  # Set the model to evaluation mode
     print("Model weights loaded.")
 
-    # Disable exploration by setting epsilon to 0
     agent.epsilon = 0
 
     state = game.reset()
@@ -29,8 +32,9 @@ def play(render=True):
         if render:
             game.render()
         step += 1
-
+    animations.game_over_screen()
     print(f"Game over! Total steps: {step}, Score: {game.score}")
 
 if __name__ == "__main__":
-    play(render=True)
+    while True:
+        play(render=True)
