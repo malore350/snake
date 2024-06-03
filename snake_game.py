@@ -10,6 +10,11 @@ pygame.init()
 WIDTH, HEIGHT = 300, 300
 GRID_SIZE = 20
 
+WINDOW_WIDTH = WIDTH
+WINDOW_HEIGHT = HEIGHT + 50  # Extra space for score
+
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
 # Colors
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -17,7 +22,6 @@ RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 
 # Initialize screen
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
 def heuristic(a, b):
@@ -164,9 +168,23 @@ class SnakeGameAI:
 
     def render(self):
         screen.fill(BLACK)
+
+        # Draw score in the extra space
+        font = pygame.font.Font(None, 36)
+        text = font.render(f'Score: {self.score}', True, WHITE)
+        screen.blit(text, (10, 10))  # Draw text at the top of the window
+
+        # Draw borders
+        pygame.draw.line(screen, WHITE, (0, 50), (WIDTH, 50), 5)  # Top border
+        pygame.draw.line(screen, WHITE, (0, HEIGHT + 50), (WIDTH, HEIGHT + 50), 5)  # Bottom border
+        pygame.draw.line(screen, WHITE, (0, 50), (0, HEIGHT + 50), 5)  # Left border
+        pygame.draw.line(screen, WHITE, (WIDTH, 50), (WIDTH, HEIGHT + 50), 5)  # Right border
+
+        # Draw snake and food
         for segment in self.snake:
-            pygame.draw.rect(screen, GREEN, (*segment, GRID_SIZE, GRID_SIZE))
-        pygame.draw.rect(screen, RED, (*self.food, GRID_SIZE, GRID_SIZE))
+            pygame.draw.rect(screen, GREEN, (segment[0], segment[1] + 50, GRID_SIZE, GRID_SIZE))
+        pygame.draw.rect(screen, RED, (self.food[0], self.food[1] + 50, GRID_SIZE, GRID_SIZE))
+
         pygame.display.flip()
         clock.tick(10)
 
