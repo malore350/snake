@@ -11,7 +11,7 @@ def play(render=True):
     agent = DQNAgent(state_dim, action_dim)
 
     # Load the model's state dictionary
-    agent.model.load_state_dict(torch.load('snake_dqn_weights_1.pth'))
+    agent.model.load_state_dict(torch.load('snake_dqn_weights_2.pth'))
     agent.model.eval()  # Set the model to evaluation mode
     print("Model weights loaded.")
 

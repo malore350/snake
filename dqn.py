@@ -5,6 +5,9 @@ import random
 import numpy as np
 from collections import deque
 
+import torch.nn.functional as F
+
+
 class DQN(nn.Module):
     def __init__(self, input_dim, output_dim):
         super(DQN, self).__init__()
@@ -28,7 +31,7 @@ class DQNAgent:
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.995
         self.learning_rate = 0.001
-        self.batch_size = 64
+        self.batch_size = 32
         self.model = DQN(state_dim, action_dim)
         self.target_model = DQN(state_dim, action_dim)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
