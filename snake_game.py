@@ -87,16 +87,16 @@ class SnakeGameAI:
                 self.direction = (20, 0)
 
         self.move_snake()
-        reward = -0.1  # Penalize each move to encourage shorter paths
+        reward = -1  # Penalize each move to encourage shorter paths
 
         if self.check_collision():
             self.done = True
-            reward = -10
+            reward = -20
         elif self.snake[0] == self.food:
             self.snake.append(self.snake[-1])
             self.food = self.generate_food()
             self.score += 1
-            reward = 10
+            reward = 20
         else:
             # Calculate path using A* algorithm
             path = a_star_search(self.snake[0], self.food, set(self.snake))

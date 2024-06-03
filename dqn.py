@@ -5,9 +5,6 @@ import random
 import numpy as np
 from collections import deque
 
-import torch.nn.functional as F
-
-
 class DQN(nn.Module):
     def __init__(self, input_dim, output_dim):
         super(DQN, self).__init__()
