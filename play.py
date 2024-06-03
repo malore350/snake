@@ -30,7 +30,7 @@ def play(render=True):
             state, reward, done = game.step(action)
 
             if render:
-            game.render()
+                  game.render()
             step += 1
       animations.game_over_screen()
       print(f"Game over! Total steps: {step}, Score: {game.score}")
