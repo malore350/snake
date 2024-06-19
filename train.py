@@ -13,12 +13,12 @@ def train(render=False, save_model=True):
     render_every_step = 10  # Render every 10 steps within an episode
 
     for e in range(episodes):
-        state = game.reset()
-        total_reward = 0
-        done = False
-        step = 0
-
-        while not done:
+      state = game.reset()
+      total_reward = 0
+      done = False
+      step = 0
+      
+      while not done:
             action = agent.act(state)
             next_state, reward, done = game.step(action)
             total_reward += reward
@@ -29,15 +29,15 @@ def train(render=False, save_model=True):
 
             # Render the game every 'render_every_step' steps
             if render and step % render_every_step == 0:
-                game.render()
+                  game.render()
             step += 1
 
-        agent.update_target_model()
-        print(f"Episode {e + 1}/{episodes}, Total Reward: {total_reward}")
-    
-    if save_model:
-        torch.save(agent.model.state_dict(), 'snake_dqn_weights_2.pth')
-        print("Model weights saved.")
+      agent.update_target_model()
+      print(f"Episode {e + 1}/{episodes}, Total Reward: {total_reward}")
+      
+      if save_model:
+            torch.save(agent.model.state_dict(), 'snake_dqn_weights_2.pth')
+            print("Model weights saved.")
 
 if __name__ == "__main__":
       # Set render=True to see the game while training
