@@ -40,5 +40,5 @@ def train(render=False, save_model=True):
         print("Model weights saved.")
 
 if __name__ == "__main__":
-    # Set render=True to see the game while training
-    train(render=True)
+      # Set render=True to see the game while training
+      train(render=True)
